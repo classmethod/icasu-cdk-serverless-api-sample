@@ -11,7 +11,7 @@
     "check:cspell": "cspell '**/*.{ts,json}' --cache --gitignore"
   },
   "devDependencies": {
-    "@types/node": "20.14.10",
+    "@types/node": "20.14.11",
     "aws-cdk": "2.149.0",
     "ts-node": "10.9.2",
     "typescript": "5.5.3"
