@@ -10,7 +10,7 @@
     "@aws-sdk/util-dynamodb": "3.614.0",
     "dayjs": "1.11.11",
     "uuid": "9.0.1",
-    "vitest": "1.6.0"
+    "vitest": "2.0.3"
   },
   "scripts": {
     "test-api:dev": "VITE_CJS_IGNORE_WARNING=true ENVIRONMENT=development vitest run api --config ./rest-api/vitest.config.ts",
