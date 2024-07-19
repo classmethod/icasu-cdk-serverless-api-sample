@@ -9,7 +9,7 @@
     "@aws-sdk/lib-dynamodb": "3.614.0",
     "@aws-sdk/util-dynamodb": "3.614.0",
     "dayjs": "1.11.11",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "vitest": "1.6.0"
   },
   "scripts": {
