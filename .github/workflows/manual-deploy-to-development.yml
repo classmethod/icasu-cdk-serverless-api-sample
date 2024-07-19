@@ -1,0 +1,58 @@
+# 指定のブランチを開発環境に手動デプロイするワークフロー
+#
+# TODO:
+#   - Reusable workflow を使用して cicd.yml と処理を共通化する
+#     @see https://docs.github.com/en/actions/using-workflows/reusing-workflows
+
+name: Manual Deploy to Development
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name"
+        required: true
+        default: develop
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      TARGET_ENV: dev
+      DEV_AWS_ACCOUNT_ID: ${{ vars.DEV_AWS_ACCOUNT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Cache Dependency
+        uses: actions/cache@v4
+        id: cache_dependency
+        env:
+          cache-name: cache-dependency
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Assume Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: "ap-northeast-1"
+          role-to-assume: ${{ vars.DEV_AWS_OIDC_ROLE_ARN }}
+
+      - name: Deploy
+        run: |
+          npm run deploy:${{ env.TARGET_ENV }}
+
+  # TODO: E2E テスト実行処理の追加

@@ -1,0 +1,21 @@
+{
+  "name": "e2e",
+  "version": "0.0.0-github-release",
+  "devDependencies": {
+    "@aws-lambda-powertools/parameters": "1.18.1",
+    "@aws-sdk/client-cognito-identity-provider": "3.614.0",
+    "@aws-sdk/client-dynamodb": "3.614.0",
+    "@aws-sdk/client-ssm": "3.614.0",
+    "@aws-sdk/lib-dynamodb": "3.614.0",
+    "@aws-sdk/util-dynamodb": "3.614.0",
+    "dayjs": "1.11.11",
+    "uuid": "9.0.1",
+    "vitest": "1.6.0"
+  },
+  "scripts": {
+    "test-api:dev": "VITE_CJS_IGNORE_WARNING=true ENVIRONMENT=development vitest run api --config ./rest-api/vitest.config.ts",
+    "test-api:stg": "VITE_CJS_IGNORE_WARNING=true ENVIRONMENT=staging vitest run api --config ./rest-api/vitest.config.ts",
+    "check:type": "tsc --noEmit",
+    "check:cspell": "cspell '**/*.{ts,json}' --cache --gitignore"
+  }
+}

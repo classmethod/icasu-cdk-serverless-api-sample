@@ -1,0 +1,231 @@
+openapi: 3.0.3
+info:
+  title: CDK Serverless API Sample REST API
+  version: 1.0.0
+tags:
+  - name: Company
+    description: 会社
+security:
+  - Bearer: []
+paths:
+  /companies:
+    get:
+      tags:
+        - Company
+      summary: 会社一覧取得
+      parameters:
+        - name: max_items
+          description: 取得する最大件数
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            default: 3
+        - name: industry
+          description: 業種で絞り込み
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/industry"
+        - name: created_after
+          description: この日時以降に作成されたデータを取得
+          in: query
+          required: false
+          schema:
+            type: number
+            format: エポックミリ秒
+            example: 1709251200000
+            description: |
+              created_after を使用する場合は、industryも指定してください。
+              created_before より小さい日時を指定してください。
+        - name: created_before
+          description: この日時以前に作成されたデータを取得
+          in: query
+          required: false
+          schema:
+            type: number
+            format: エポックミリ秒
+            example: 1089126000000
+            description: |
+              created_before を使用する場合は、industryも指定してください。
+              created_after より大きい日時を指定してください。
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/companiesGetResponseBody"
+        "400":
+          description: Bad Request（バリデーションエラー）
+        "401":
+          description: Unauthorized（認証エラー）
+        "500":
+          description: Internal Server Error（サーバーエラー）
+    post:
+      tags:
+        - Company
+      summary: 会社作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/companiesPostRequestBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/companiesPostResponseBody"
+          headers:
+            Location:
+              description: 作成されたリソースの URI
+              schema:
+                type: string
+                format: uri
+                example: /companies/e3162725-4b5b-4779-bf13-14d55d63a584
+        "400":
+          description: Bad Request（バリデーションエラー）
+        "401":
+          description: Unauthorized（認証エラー）
+        "409":
+          description: Conflict（リソースの競合）
+        "500":
+          description: Internal Server Error（サーバーエラー）
+  /companies/{companyId}:
+    get:
+      tags:
+        - Company
+      summary: 会社取得
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/companyId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/companiesIdGetResponseBody"
+        "400":
+          description: Bad Request（バリデーションエラー）
+        "401":
+          description: Unauthorized（認証エラー）
+        "404":
+          description: Not Found（リソースが見つからない）
+        "500":
+          description: Internal Server Error（サーバーエラー）
+    delete:
+      tags:
+        - Company
+      summary: 会社削除
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/companyId"
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request（バリデーションエラー）
+        "401":
+          description: Unauthorized（認証エラー）
+        "404":
+          description: Not Found（リソースが見つからない）
+        "500":
+          description: Internal Server Error（サーバーエラー）
+components:
+  schemas:
+    companiesGetResponseBody:
+      type: object
+      properties:
+        companyId:
+          $ref: "#/components/schemas/companyId"
+        createdAt:
+          $ref: "#/components/schemas/createdAt"
+        companyName:
+          $ref: "#/components/schemas/companyName"
+        industry:
+          $ref: "#/components/schemas/industry"
+      required:
+        - companyId
+        - createdAt
+        - companyName
+    companiesPostRequestBody:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/companyName"
+        industry:
+          $ref: "#/components/schemas/industry"
+      required:
+        - companyName
+    companiesPostResponseBody:
+      type: object
+      properties:
+        companyId:
+          $ref: "#/components/schemas/companyId"
+        createdAt:
+          $ref: "#/components/schemas/createdAt"
+        companyName:
+          $ref: "#/components/schemas/companyName"
+        industry:
+          $ref: "#/components/schemas/industry"
+      required:
+        - id
+        - createdAt
+        - companyName
+    companiesIdGetResponseBody:
+      type: object
+      properties:
+        companyId:
+          $ref: "#/components/schemas/companyId"
+        createdAt:
+          $ref: "#/components/schemas/createdAt"
+        companyName:
+          $ref: "#/components/schemas/companyName"
+        industry:
+          $ref: "#/components/schemas/industry"
+      required:
+        - companyId
+        - createdAt
+        - companyName
+    companyId:
+      type: string
+      description: 会社 ID
+      example: e3162725-4b5b-4779-bf13-14d55d63a584
+    createdAt:
+      type: number
+      description: データ作成日時
+      format: エポックミリ秒
+      example: 1089126000000
+    companyName:
+      type: string
+      description: 会社名
+      example: ICASU, Inc.
+    industry:
+      type: string
+      description: 業種
+      enum:
+        - IT
+        - Manufacturing
+        - Finance
+        - Medical
+        - Other
+      example: IT
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,28 @@
+# @see https://docs.github.com/ja/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions#enable-auto-merge-on-a-pull-request
+name: Dependabot auto-merge
+# ブランチ保護が無効の場合は CI Fail 時も自動マージが行われてしまう。
+# TODO: ブランチ保護有効後にトリガーを pull_request に戻す。
+# on: pull_request
+on: workflow_dispatch
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Enable auto-merge for Dependabot PRs
+        # minor または patch バージョンのアップデートのみ自動マージ対象とする
+        if: ${{steps.metadata.outputs.update-type != 'version-update:semver-major'}}
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          # PR_URL: ${{github.event.pull_request.html_url}} # バリデーションエラー抑制のためコメントアウト。ブランチ保護有効後にコメントインする。
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

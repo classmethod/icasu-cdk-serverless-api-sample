@@ -1,0 +1,4802 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Develop Environment > snapshot 1`] = `
+{
+  "Outputs": {
+    "ApiRestApiEndpoint4DEFB5CC": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ApiRestApiE35FEAFE",
+            },
+            ".execute-api.ap-northeast-1.",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "GitHubActionsOidcGitHubActionsOidcRoleArnOutput4103C503": {
+      "Value": {
+        "Fn::GetAtt": [
+          "GitHubActionsOidcGitHubActionsOidcRole060A8DC2",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355": {
+      "Default": "/dev/icasu-cdk-common-resources-sample/alertNotificationTopicArn",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "ApiApiGatewayMetricsMonitoringRestApi5XXErrorAlarmFD090E3E": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "ApiGatewayRestApi5XXError",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "RestApi",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 30,
+        "Statistic": "Sum",
+        "Threshold": 10,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiCognitoUserPoolsAuthorizer04FC63E8": {
+      "Properties": {
+        "IdentitySource": "method.request.header.Authorization",
+        "Name": "devicasucdkserverlessapisampleMainStackApiCognitoUserPoolsAuthorizer09F5911C",
+        "ProviderARNs": [
+          {
+            "Fn::GetAtt": [
+              "CognitoUserPool279BBD48",
+              "Arn",
+            ],
+          },
+        ],
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+        "Type": "COGNITO_USER_POOLS",
+      },
+      "Type": "AWS::ApiGateway::Authorizer",
+    },
+    "ApiRestApiANY1340C355": {
+      "Properties": {
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "ApiCognitoUserPoolsAuthorizer04FC63E8",
+        },
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiRestApiFuncF1701C1C",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiANYApiPermissionTestdevicasucdkserverlessapisampleMainStackApiRestApiAEB20FBAANY80828993": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:dev-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/test-invoke-stage/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiANYApiPermissiondevicasucdkserverlessapisampleMainStackApiRestApiAEB20FBAANYE9C60E6B": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:dev-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiAccount598A1DA6": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ApiRestApiE35FEAFE",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "ApiRestApiCloudWatchRoleB7879BFC",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiRestApiCloudWatchRoleB7879BFC": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiRestApiDefault4xxF2DDE8E9": {
+      "Properties": {
+        "ResponseParameters": {
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+        },
+        "ResponseType": "DEFAULT_4XX",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::GatewayResponse",
+    },
+    "ApiRestApiDefault5xxF4F672B9": {
+      "Properties": {
+        "ResponseParameters": {
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+        },
+        "ResponseType": "DEFAULT_5XX",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::GatewayResponse",
+    },
+    "ApiRestApiDeploymentDC05A82D19cc32df4734d8c2a482d458a59dc6bf": {
+      "DependsOn": [
+        "ApiRestApiproxyANY7D1D2F15",
+        "ApiRestApiproxyOPTIONS14872AA4",
+        "ApiRestApiproxy95CB4350",
+        "ApiRestApiANY1340C355",
+        "ApiRestApiOPTIONSB925735A",
+        "ApiRestApiDefault4xxF2DDE8E9",
+        "ApiRestApiDefault5xxF4F672B9",
+      ],
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "ApiRestApiDeploymentStagev157F58EAC": {
+      "DependsOn": [
+        "ApiRestApiAccount598A1DA6",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "ApiRestApiDeploymentDC05A82D19cc32df4734d8c2a482d458a59dc6bf",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+        "StageName": "v1",
+        "TracingEnabled": true,
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiRestApiE35FEAFE": {
+      "Properties": {
+        "Name": "RestApi",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "ApiRestApiEndpointParameter75C7A864": {
+      "Properties": {
+        "Name": "/dev/icasu-cdk-serverless-api-sample/e2e/REST_API_ENDPOINT",
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "https://",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              ".execute-api.ap-northeast-1.",
+              {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringERRORAlarm937B0D12": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "RestApiFuncApplicationLogERROR",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "ERROR",
+        "Namespace": "Lambda/RestApiFunc",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringERRORMetricFilter293F702D": {
+      "Properties": {
+        "FilterPattern": "ERROR",
+        "LogGroupName": {
+          "Ref": "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359",
+        },
+        "MetricTransformations": [
+          {
+            "MetricName": "ERROR",
+            "MetricNamespace": "Lambda/RestApiFunc",
+            "MetricValue": "1",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiRestApiFuncF1701C1C",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringWARNAlarmA0A85D6F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "RestApiFuncApplicationLogWARN",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "WARN",
+        "Namespace": "Lambda/RestApiFunc",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringWARNMetricFilterC4D1BEE4": {
+      "Properties": {
+        "FilterPattern": "WARN",
+        "LogGroupName": {
+          "Ref": "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359",
+        },
+        "MetricTransformations": [
+          {
+            "MetricName": "WARN",
+            "MetricNamespace": "Lambda/RestApiFunc",
+            "MetricValue": "1",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "ApiRestApiFuncF1701C1C": {
+      "DependsOn": [
+        "ApiRestApiFuncServiceRoleDefaultPolicyA475465A",
+        "ApiRestApiFuncServiceRole5CBC5B3F",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-dev-dummy-aws-account-id-ap-northeast-1",
+          "S3Key": "HASH-REPLACED.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "COMPANIES_TABLE_INDUSTRY_CREATED_AT_INDEX_NAME": "IndustryCreatedAtIndex",
+            "COMPANIES_TABLE_NAME": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+            "POWERTOOLS_SERVICE_NAME": "dev-icasu-cdk-serverless-api-sample",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncServiceRole5CBC5B3F",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "TracingConfig": {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiRestApiFuncServiceRole5CBC5B3F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiRestApiFuncServiceRoleDefaultPolicyA475465A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "DynamodbCompaniesTable31F93658",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "DynamodbCompaniesTable31F93658",
+                          "Arn",
+                        ],
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiRestApiFuncServiceRoleDefaultPolicyA475465A",
+        "Roles": [
+          {
+            "Ref": "ApiRestApiFuncServiceRole5CBC5B3F",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiRestApiOPTIONSB925735A": {
+      "Properties": {
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'300'",
+              },
+              "StatusCode": "204",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": "{ statusCode: 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Max-Age": true,
+            },
+            "StatusCode": "204",
+          },
+        ],
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiproxy95CB4350": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "ApiRestApiproxyANY7D1D2F15": {
+      "Properties": {
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "ApiCognitoUserPoolsAuthorizer04FC63E8",
+        },
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiRestApiFuncF1701C1C",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "ApiRestApiproxy95CB4350",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiproxyANYApiPermissionTestdevicasucdkserverlessapisampleMainStackApiRestApiAEB20FBAANYproxyB25649ED": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:dev-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/test-invoke-stage/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiproxyANYApiPermissiondevicasucdkserverlessapisampleMainStackApiRestApiAEB20FBAANYproxy6DC1606E": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:dev-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiproxyOPTIONS14872AA4": {
+      "Properties": {
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'300'",
+              },
+              "StatusCode": "204",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": "{ statusCode: 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Max-Age": true,
+            },
+            "StatusCode": "204",
+          },
+        ],
+        "ResourceId": {
+          "Ref": "ApiRestApiproxy95CB4350",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiWebAclRestApiAssociationD0E2B756": {
+      "Properties": {
+        "ResourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":apigateway:ap-northeast-1::/restapis/",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/stages/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+            ],
+          ],
+        },
+        "WebACLArn": {
+          "Fn::GetAtt": [
+            "WafForApiWebAcl18C8DBD1",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::WebACLAssociation",
+    },
+    "CognitoClientIdParameterF7D496F1": {
+      "Properties": {
+        "Name": "/dev/icasu-cdk-serverless-api-sample/e2e/COGNITO_CLIENT_ID",
+        "Type": "String",
+        "Value": {
+          "Ref": "CognitoUserPoolUserPoolClientForE2ETest9104A734",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "CognitoUserPool279BBD48": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1,
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2,
+            },
+          ],
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+        },
+        "AutoVerifiedAttributes": [
+          "email",
+        ],
+        "DeletionProtection": "ACTIVE",
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "EnabledMfas": [
+          "SMS_MFA",
+        ],
+        "MfaConfiguration": "OPTIONAL",
+        "SmsConfiguration": {
+          "ExternalId": "devicasucdkserverlessapisampleMainStackCognitoUserPoolD7965644",
+          "SnsCallerArn": {
+            "Fn::GetAtt": [
+              "CognitoUserPoolsmsRole738960F0",
+              "Arn",
+            ],
+          },
+        },
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UsernameAttributes": [
+          "email",
+        ],
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}",
+        },
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CognitoUserPoolIdParameterDC16FB6A": {
+      "Properties": {
+        "Name": "/dev/icasu-cdk-serverless-api-sample/e2e/COGNITO_USER_POOL_ID",
+        "Type": "String",
+        "Value": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "CognitoUserPoolUserPoolClient1E6BF456": {
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "profile",
+          "openid",
+        ],
+        "CallbackURLs": [
+          "https://dev.example.com/",
+        ],
+        "GenerateSecret": false,
+        "LogoutURLs": [
+          "https://dev.example.com/",
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "CognitoUserPoolUserPoolClientForE2ETest9104A734": {
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "profile",
+          "openid",
+        ],
+        "CallbackURLs": [
+          "https://dev.example.com/",
+        ],
+        "ExplicitAuthFlows": [
+          "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+        ],
+        "GenerateSecret": false,
+        "LogoutURLs": [
+          "https://dev.example.com/",
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "CognitoUserPoolUserPoolDomainC12FFA2B": {
+      "Properties": {
+        "Domain": "dev-icasu-cdk-serverless-api-sample",
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolDomain",
+    },
+    "CognitoUserPoolsmsRole738960F0": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "devicasucdkserverlessapisampleMainStackCognitoUserPoolD7965644",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cognito-idp.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "sns:Publish",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "sns-publish",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CognitoWebAclUserPoolAssociation324DD356": {
+      "Properties": {
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "CognitoUserPool279BBD48",
+            "Arn",
+          ],
+        },
+        "WebACLArn": {
+          "Fn::GetAtt": [
+            "WafForUserPoolWebAcl0EF70449",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::WebACLAssociation",
+    },
+    "DynamodbCompaniesTable31F93658": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "industry",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "N",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "DeletionProtectionEnabled": true,
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "IndustryCreatedAtIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "industry",
+                "KeyType": "HASH",
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE",
+              },
+            ],
+            "Projection": {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "DynamodbCompaniesTableNameParameter5ABDA0D3": {
+      "Properties": {
+        "Name": "/dev/icasu-cdk-serverless-api-sample/e2e/COMPANIES_TABLE_NAME",
+        "Type": "String",
+        "Value": {
+          "Ref": "DynamodbCompaniesTable31F93658",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableConsumedReadCapacityUnitsAlarmDD661C43": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableConsumedReadCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableConsumedWriteCapacityUnitsAlarmF81D194F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableConsumedWriteCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableIndustryCreatedAtIndexConsumedReadCapacityUnitsAlarmD247F78B": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableIndustryCreatedAtIndexConsumedReadCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "GlobalSecondaryIndexName",
+            "Value": "IndustryCreatedAtIndex",
+          },
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableIndustryCreatedAtIndexConsumedWriteCapacityUnitsAlarm938AB83F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableIndustryCreatedAtIndexConsumedWriteCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "GlobalSecondaryIndexName",
+            "Value": "IndustryCreatedAtIndex",
+          },
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableSystemErrorsAlarm17DCB297": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableSystemErrors",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "SystemErrors",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 3,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "GitHubActionsOidcCdkDeployPolicy1176F8AD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:getBucketLocation",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::*",
+            },
+            {
+              "Action": [
+                "cloudformation:CreateStack",
+                "cloudformation:CreateChangeSet",
+                "cloudformation:DeleteChangeSet",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:DescribeStacks",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:ExecuteChangeSet",
+                "cloudformation:GetTemplate",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:cloudformation:ap-northeast-1:dev-dummy-aws-account-id:stack/*/*",
+            },
+            {
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::cdk-hnb659fds-assets-dev-dummy-aws-account-id-ap-northeast-1/*",
+            },
+            {
+              "Action": "ssm:GetParameter",
+              "Effect": "Allow",
+              "Resource": "arn:aws:ssm:ap-northeast-1:dev-dummy-aws-account-id:parameter/cdk-bootstrap/hnb659fds/version",
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::dev-dummy-aws-account-id:role/cdk-hnb659fds-cfn-exec-role-dev-dummy-aws-account-id-ap-northeast-1",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkDeployPolicy",
+        "Roles": [
+          {
+            "Ref": "GitHubActionsOidcGitHubActionsOidcRole060A8DC2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GitHubActionsOidcGitHubActionsOidcRole060A8DC2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+                },
+                "StringLike": {
+                  "token.actions.githubusercontent.com:sub": "repo:classmethod-internal/icasu-cdk-serverless-api-sample:*",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "arn:aws:iam::dev-dummy-aws-account-id:oidc-provider/token.actions.githubusercontent.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "WafForApiLogConfigA6FEBD50": {
+      "DependsOn": [
+        "WafForApiWebAcl18C8DBD1",
+      ],
+      "Properties": {
+        "LogDestinationConfigs": [
+          {
+            "Fn::GetAtt": [
+              "WafForApiLogGroup99D88402",
+              "Arn",
+            ],
+          },
+        ],
+        "LoggingFilter": {
+          "DefaultBehavior": "DROP",
+          "Filters": [
+            {
+              "Behavior": "KEEP",
+              "Conditions": [
+                {
+                  "ActionCondition": {
+                    "Action": "BLOCK",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "COUNT",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "EXCLUDED_AS_COUNT",
+                  },
+                },
+              ],
+              "Requirement": "MEETS_ANY",
+            },
+          ],
+        },
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "WafForApiWebAcl18C8DBD1",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::LoggingConfiguration",
+    },
+    "WafForApiLogGroup99D88402": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "aws-waf-logs-",
+              {
+                "Fn::GetAtt": [
+                  "WafForApiWebAcl18C8DBD1",
+                  "Id",
+                ],
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "WafForApiWebAcl18C8DBD1": {
+      "Properties": {
+        "DefaultAction": {
+          "Allow": {},
+        },
+        "Rules": [
+          {
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 1,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesCommonRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesCommonRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 2,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesKnownBadInputsRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesAmazonIpReputationList",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 3,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesAmazonIpReputationList",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesAmazonIpReputationList",
+              "SampledRequestsEnabled": true,
+            },
+          },
+        ],
+        "Scope": "REGIONAL",
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "WebAcl",
+          "SampledRequestsEnabled": true,
+        },
+      },
+      "Type": "AWS::WAFv2::WebACL",
+    },
+    "WafForUserPoolLogConfigD51477D4": {
+      "DependsOn": [
+        "WafForUserPoolWebAcl0EF70449",
+      ],
+      "Properties": {
+        "LogDestinationConfigs": [
+          {
+            "Fn::GetAtt": [
+              "WafForUserPoolLogGroup11AD1A0E",
+              "Arn",
+            ],
+          },
+        ],
+        "LoggingFilter": {
+          "DefaultBehavior": "DROP",
+          "Filters": [
+            {
+              "Behavior": "KEEP",
+              "Conditions": [
+                {
+                  "ActionCondition": {
+                    "Action": "BLOCK",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "COUNT",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "EXCLUDED_AS_COUNT",
+                  },
+                },
+              ],
+              "Requirement": "MEETS_ANY",
+            },
+          ],
+        },
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "WafForUserPoolWebAcl0EF70449",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::LoggingConfiguration",
+    },
+    "WafForUserPoolLogGroup11AD1A0E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "aws-waf-logs-",
+              {
+                "Fn::GetAtt": [
+                  "WafForUserPoolWebAcl0EF70449",
+                  "Id",
+                ],
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "WafForUserPoolWebAcl0EF70449": {
+      "Properties": {
+        "DefaultAction": {
+          "Allow": {},
+        },
+        "Rules": [
+          {
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 1,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesCommonRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesCommonRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 2,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesKnownBadInputsRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesAmazonIpReputationList",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 3,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesAmazonIpReputationList",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesAmazonIpReputationList",
+              "SampledRequestsEnabled": true,
+            },
+          },
+        ],
+        "Scope": "REGIONAL",
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "WebAcl",
+          "SampledRequestsEnabled": true,
+        },
+      },
+      "Type": "AWS::WAFv2::WebACL",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`Production Environment > snapshot 1`] = `
+{
+  "Outputs": {
+    "ApiRestApiEndpoint4DEFB5CC": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ApiRestApiE35FEAFE",
+            },
+            ".execute-api.ap-northeast-1.",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "GitHubActionsOidcGitHubActionsOidcRoleArnOutput4103C503": {
+      "Value": {
+        "Fn::GetAtt": [
+          "GitHubActionsOidcGitHubActionsOidcRole060A8DC2",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355": {
+      "Default": "/prd/icasu-cdk-common-resources-sample/alertNotificationTopicArn",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "ApiApiGatewayMetricsMonitoringRestApi5XXErrorAlarmFD090E3E": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "ApiGatewayRestApi5XXError",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "RestApi",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 30,
+        "Statistic": "Sum",
+        "Threshold": 10,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiCognitoUserPoolsAuthorizer04FC63E8": {
+      "Properties": {
+        "IdentitySource": "method.request.header.Authorization",
+        "Name": "prdicasucdkserverlessapisampleMainStackApiCognitoUserPoolsAuthorizer9D04B1A1",
+        "ProviderARNs": [
+          {
+            "Fn::GetAtt": [
+              "CognitoUserPool279BBD48",
+              "Arn",
+            ],
+          },
+        ],
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+        "Type": "COGNITO_USER_POOLS",
+      },
+      "Type": "AWS::ApiGateway::Authorizer",
+    },
+    "ApiRestApiANY1340C355": {
+      "Properties": {
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "ApiCognitoUserPoolsAuthorizer04FC63E8",
+        },
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiRestApiFuncF1701C1C",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiANYApiPermissionTestprdicasucdkserverlessapisampleMainStackApiRestApiA7E39D83ANY3DD137FE": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:prd-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/test-invoke-stage/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiANYApiPermissionprdicasucdkserverlessapisampleMainStackApiRestApiA7E39D83ANY5FCC934C": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:prd-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiAccount598A1DA6": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ApiRestApiE35FEAFE",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "ApiRestApiCloudWatchRoleB7879BFC",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiRestApiCloudWatchRoleB7879BFC": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiRestApiDefault4xxF2DDE8E9": {
+      "Properties": {
+        "ResponseParameters": {
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+        },
+        "ResponseType": "DEFAULT_4XX",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::GatewayResponse",
+    },
+    "ApiRestApiDefault5xxF4F672B9": {
+      "Properties": {
+        "ResponseParameters": {
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+        },
+        "ResponseType": "DEFAULT_5XX",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::GatewayResponse",
+    },
+    "ApiRestApiDeploymentDC05A82D19cc32df4734d8c2a482d458a59dc6bf": {
+      "DependsOn": [
+        "ApiRestApiproxyANY7D1D2F15",
+        "ApiRestApiproxyOPTIONS14872AA4",
+        "ApiRestApiproxy95CB4350",
+        "ApiRestApiANY1340C355",
+        "ApiRestApiOPTIONSB925735A",
+        "ApiRestApiDefault4xxF2DDE8E9",
+        "ApiRestApiDefault5xxF4F672B9",
+      ],
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "ApiRestApiDeploymentStagev157F58EAC": {
+      "DependsOn": [
+        "ApiRestApiAccount598A1DA6",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "ApiRestApiDeploymentDC05A82D19cc32df4734d8c2a482d458a59dc6bf",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+        "StageName": "v1",
+        "TracingEnabled": true,
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiRestApiE35FEAFE": {
+      "Properties": {
+        "Name": "RestApi",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "ApiRestApiEndpointParameter75C7A864": {
+      "Properties": {
+        "Name": "/prd/icasu-cdk-serverless-api-sample/e2e/REST_API_ENDPOINT",
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "https://",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              ".execute-api.ap-northeast-1.",
+              {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringERRORAlarm937B0D12": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "RestApiFuncApplicationLogERROR",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "ERROR",
+        "Namespace": "Lambda/RestApiFunc",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringERRORMetricFilter293F702D": {
+      "Properties": {
+        "FilterPattern": "ERROR",
+        "LogGroupName": {
+          "Ref": "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359",
+        },
+        "MetricTransformations": [
+          {
+            "MetricName": "ERROR",
+            "MetricNamespace": "Lambda/RestApiFunc",
+            "MetricValue": "1",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiRestApiFuncF1701C1C",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringWARNAlarmA0A85D6F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "RestApiFuncApplicationLogWARN",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "WARN",
+        "Namespace": "Lambda/RestApiFunc",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringWARNMetricFilterC4D1BEE4": {
+      "Properties": {
+        "FilterPattern": "WARN",
+        "LogGroupName": {
+          "Ref": "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359",
+        },
+        "MetricTransformations": [
+          {
+            "MetricName": "WARN",
+            "MetricNamespace": "Lambda/RestApiFunc",
+            "MetricValue": "1",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "ApiRestApiFuncF1701C1C": {
+      "DependsOn": [
+        "ApiRestApiFuncServiceRoleDefaultPolicyA475465A",
+        "ApiRestApiFuncServiceRole5CBC5B3F",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-prd-dummy-aws-account-id-ap-northeast-1",
+          "S3Key": "HASH-REPLACED.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "COMPANIES_TABLE_INDUSTRY_CREATED_AT_INDEX_NAME": "IndustryCreatedAtIndex",
+            "COMPANIES_TABLE_NAME": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+            "POWERTOOLS_SERVICE_NAME": "prd-icasu-cdk-serverless-api-sample",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncServiceRole5CBC5B3F",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "TracingConfig": {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiRestApiFuncServiceRole5CBC5B3F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiRestApiFuncServiceRoleDefaultPolicyA475465A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "DynamodbCompaniesTable31F93658",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "DynamodbCompaniesTable31F93658",
+                          "Arn",
+                        ],
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiRestApiFuncServiceRoleDefaultPolicyA475465A",
+        "Roles": [
+          {
+            "Ref": "ApiRestApiFuncServiceRole5CBC5B3F",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiRestApiOPTIONSB925735A": {
+      "Properties": {
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'300'",
+              },
+              "StatusCode": "204",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": "{ statusCode: 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Max-Age": true,
+            },
+            "StatusCode": "204",
+          },
+        ],
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiproxy95CB4350": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "ApiRestApiproxyANY7D1D2F15": {
+      "Properties": {
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "ApiCognitoUserPoolsAuthorizer04FC63E8",
+        },
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiRestApiFuncF1701C1C",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "ApiRestApiproxy95CB4350",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiproxyANYApiPermissionTestprdicasucdkserverlessapisampleMainStackApiRestApiA7E39D83ANYproxy380FCB1C": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:prd-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/test-invoke-stage/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiproxyANYApiPermissionprdicasucdkserverlessapisampleMainStackApiRestApiA7E39D83ANYproxy683D3D1A": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:prd-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiproxyOPTIONS14872AA4": {
+      "Properties": {
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'300'",
+              },
+              "StatusCode": "204",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": "{ statusCode: 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Max-Age": true,
+            },
+            "StatusCode": "204",
+          },
+        ],
+        "ResourceId": {
+          "Ref": "ApiRestApiproxy95CB4350",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiWebAclRestApiAssociationD0E2B756": {
+      "Properties": {
+        "ResourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":apigateway:ap-northeast-1::/restapis/",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/stages/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+            ],
+          ],
+        },
+        "WebACLArn": {
+          "Fn::GetAtt": [
+            "WafForApiWebAcl18C8DBD1",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::WebACLAssociation",
+    },
+    "CognitoUserPool279BBD48": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1,
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2,
+            },
+          ],
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+        },
+        "AutoVerifiedAttributes": [
+          "email",
+        ],
+        "DeletionProtection": "ACTIVE",
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "EnabledMfas": [
+          "SMS_MFA",
+        ],
+        "MfaConfiguration": "OPTIONAL",
+        "SmsConfiguration": {
+          "ExternalId": "prdicasucdkserverlessapisampleMainStackCognitoUserPoolFD794DD2",
+          "SnsCallerArn": {
+            "Fn::GetAtt": [
+              "CognitoUserPoolsmsRole738960F0",
+              "Arn",
+            ],
+          },
+        },
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UsernameAttributes": [
+          "email",
+        ],
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}",
+        },
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CognitoUserPoolIdParameterDC16FB6A": {
+      "Properties": {
+        "Name": "/prd/icasu-cdk-serverless-api-sample/e2e/COGNITO_USER_POOL_ID",
+        "Type": "String",
+        "Value": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "CognitoUserPoolUserPoolClient1E6BF456": {
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "profile",
+          "openid",
+        ],
+        "CallbackURLs": [
+          "https://example.com/",
+        ],
+        "GenerateSecret": false,
+        "LogoutURLs": [
+          "https://example.com/",
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "CognitoUserPoolUserPoolDomainC12FFA2B": {
+      "Properties": {
+        "Domain": "prd-icasu-cdk-serverless-api-sample",
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolDomain",
+    },
+    "CognitoUserPoolsmsRole738960F0": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "prdicasucdkserverlessapisampleMainStackCognitoUserPoolFD794DD2",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cognito-idp.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "sns:Publish",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "sns-publish",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CognitoWebAclUserPoolAssociation324DD356": {
+      "Properties": {
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "CognitoUserPool279BBD48",
+            "Arn",
+          ],
+        },
+        "WebACLArn": {
+          "Fn::GetAtt": [
+            "WafForUserPoolWebAcl0EF70449",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::WebACLAssociation",
+    },
+    "DynamodbCompaniesTable31F93658": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "industry",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "N",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "DeletionProtectionEnabled": true,
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "IndustryCreatedAtIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "industry",
+                "KeyType": "HASH",
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE",
+              },
+            ],
+            "Projection": {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "DynamodbCompaniesTableNameParameter5ABDA0D3": {
+      "Properties": {
+        "Name": "/prd/icasu-cdk-serverless-api-sample/e2e/COMPANIES_TABLE_NAME",
+        "Type": "String",
+        "Value": {
+          "Ref": "DynamodbCompaniesTable31F93658",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableConsumedReadCapacityUnitsAlarmDD661C43": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableConsumedReadCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableConsumedWriteCapacityUnitsAlarmF81D194F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableConsumedWriteCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableIndustryCreatedAtIndexConsumedReadCapacityUnitsAlarmD247F78B": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableIndustryCreatedAtIndexConsumedReadCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "GlobalSecondaryIndexName",
+            "Value": "IndustryCreatedAtIndex",
+          },
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableIndustryCreatedAtIndexConsumedWriteCapacityUnitsAlarm938AB83F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableIndustryCreatedAtIndexConsumedWriteCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "GlobalSecondaryIndexName",
+            "Value": "IndustryCreatedAtIndex",
+          },
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableSystemErrorsAlarm17DCB297": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableSystemErrors",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "SystemErrors",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 3,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "GitHubActionsOidcCdkDeployPolicy1176F8AD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:getBucketLocation",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::*",
+            },
+            {
+              "Action": [
+                "cloudformation:CreateStack",
+                "cloudformation:CreateChangeSet",
+                "cloudformation:DeleteChangeSet",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:DescribeStacks",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:ExecuteChangeSet",
+                "cloudformation:GetTemplate",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:cloudformation:ap-northeast-1:prd-dummy-aws-account-id:stack/*/*",
+            },
+            {
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::cdk-hnb659fds-assets-prd-dummy-aws-account-id-ap-northeast-1/*",
+            },
+            {
+              "Action": "ssm:GetParameter",
+              "Effect": "Allow",
+              "Resource": "arn:aws:ssm:ap-northeast-1:prd-dummy-aws-account-id:parameter/cdk-bootstrap/hnb659fds/version",
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::prd-dummy-aws-account-id:role/cdk-hnb659fds-cfn-exec-role-prd-dummy-aws-account-id-ap-northeast-1",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkDeployPolicy",
+        "Roles": [
+          {
+            "Ref": "GitHubActionsOidcGitHubActionsOidcRole060A8DC2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GitHubActionsOidcGitHubActionsOidcRole060A8DC2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+                },
+                "StringLike": {
+                  "token.actions.githubusercontent.com:sub": "repo:classmethod-internal/icasu-cdk-serverless-api-sample:*",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "arn:aws:iam::prd-dummy-aws-account-id:oidc-provider/token.actions.githubusercontent.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "WafForApiLogConfigA6FEBD50": {
+      "DependsOn": [
+        "WafForApiWebAcl18C8DBD1",
+      ],
+      "Properties": {
+        "LogDestinationConfigs": [
+          {
+            "Fn::GetAtt": [
+              "WafForApiLogGroup99D88402",
+              "Arn",
+            ],
+          },
+        ],
+        "LoggingFilter": {
+          "DefaultBehavior": "DROP",
+          "Filters": [
+            {
+              "Behavior": "KEEP",
+              "Conditions": [
+                {
+                  "ActionCondition": {
+                    "Action": "BLOCK",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "COUNT",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "EXCLUDED_AS_COUNT",
+                  },
+                },
+              ],
+              "Requirement": "MEETS_ANY",
+            },
+          ],
+        },
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "WafForApiWebAcl18C8DBD1",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::LoggingConfiguration",
+    },
+    "WafForApiLogGroup99D88402": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "aws-waf-logs-",
+              {
+                "Fn::GetAtt": [
+                  "WafForApiWebAcl18C8DBD1",
+                  "Id",
+                ],
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "WafForApiWebAcl18C8DBD1": {
+      "Properties": {
+        "DefaultAction": {
+          "Allow": {},
+        },
+        "Rules": [
+          {
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 1,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesCommonRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesCommonRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 2,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesKnownBadInputsRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesAmazonIpReputationList",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 3,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesAmazonIpReputationList",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesAmazonIpReputationList",
+              "SampledRequestsEnabled": true,
+            },
+          },
+        ],
+        "Scope": "REGIONAL",
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "WebAcl",
+          "SampledRequestsEnabled": true,
+        },
+      },
+      "Type": "AWS::WAFv2::WebACL",
+    },
+    "WafForUserPoolLogConfigD51477D4": {
+      "DependsOn": [
+        "WafForUserPoolWebAcl0EF70449",
+      ],
+      "Properties": {
+        "LogDestinationConfigs": [
+          {
+            "Fn::GetAtt": [
+              "WafForUserPoolLogGroup11AD1A0E",
+              "Arn",
+            ],
+          },
+        ],
+        "LoggingFilter": {
+          "DefaultBehavior": "DROP",
+          "Filters": [
+            {
+              "Behavior": "KEEP",
+              "Conditions": [
+                {
+                  "ActionCondition": {
+                    "Action": "BLOCK",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "COUNT",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "EXCLUDED_AS_COUNT",
+                  },
+                },
+              ],
+              "Requirement": "MEETS_ANY",
+            },
+          ],
+        },
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "WafForUserPoolWebAcl0EF70449",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::LoggingConfiguration",
+    },
+    "WafForUserPoolLogGroup11AD1A0E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "aws-waf-logs-",
+              {
+                "Fn::GetAtt": [
+                  "WafForUserPoolWebAcl0EF70449",
+                  "Id",
+                ],
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "WafForUserPoolWebAcl0EF70449": {
+      "Properties": {
+        "DefaultAction": {
+          "Allow": {},
+        },
+        "Rules": [
+          {
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 1,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesCommonRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesCommonRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 2,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesKnownBadInputsRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesAmazonIpReputationList",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 3,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesAmazonIpReputationList",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesAmazonIpReputationList",
+              "SampledRequestsEnabled": true,
+            },
+          },
+        ],
+        "Scope": "REGIONAL",
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "WebAcl",
+          "SampledRequestsEnabled": true,
+        },
+      },
+      "Type": "AWS::WAFv2::WebACL",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`Staging Environment > snapshot 1`] = `
+{
+  "Outputs": {
+    "ApiRestApiEndpoint4DEFB5CC": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ApiRestApiE35FEAFE",
+            },
+            ".execute-api.ap-northeast-1.",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "GitHubActionsOidcGitHubActionsOidcRoleArnOutput4103C503": {
+      "Value": {
+        "Fn::GetAtt": [
+          "GitHubActionsOidcGitHubActionsOidcRole060A8DC2",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355": {
+      "Default": "/stg/icasu-cdk-common-resources-sample/alertNotificationTopicArn",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "ApiApiGatewayMetricsMonitoringRestApi5XXErrorAlarmFD090E3E": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "ApiGatewayRestApi5XXError",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "RestApi",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 30,
+        "Statistic": "Sum",
+        "Threshold": 10,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiCognitoUserPoolsAuthorizer04FC63E8": {
+      "Properties": {
+        "IdentitySource": "method.request.header.Authorization",
+        "Name": "stgicasucdkserverlessapisampleMainStackApiCognitoUserPoolsAuthorizer2EA2D1A7",
+        "ProviderARNs": [
+          {
+            "Fn::GetAtt": [
+              "CognitoUserPool279BBD48",
+              "Arn",
+            ],
+          },
+        ],
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+        "Type": "COGNITO_USER_POOLS",
+      },
+      "Type": "AWS::ApiGateway::Authorizer",
+    },
+    "ApiRestApiANY1340C355": {
+      "Properties": {
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "ApiCognitoUserPoolsAuthorizer04FC63E8",
+        },
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiRestApiFuncF1701C1C",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiANYApiPermissionTeststgicasucdkserverlessapisampleMainStackApiRestApiB79C9F1CANY795A066D": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:stg-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/test-invoke-stage/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiANYApiPermissionstgicasucdkserverlessapisampleMainStackApiRestApiB79C9F1CANYB80B6CF2": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:stg-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiAccount598A1DA6": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ApiRestApiE35FEAFE",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "ApiRestApiCloudWatchRoleB7879BFC",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiRestApiCloudWatchRoleB7879BFC": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiRestApiDefault4xxF2DDE8E9": {
+      "Properties": {
+        "ResponseParameters": {
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+        },
+        "ResponseType": "DEFAULT_4XX",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::GatewayResponse",
+    },
+    "ApiRestApiDefault5xxF4F672B9": {
+      "Properties": {
+        "ResponseParameters": {
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+        },
+        "ResponseType": "DEFAULT_5XX",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::GatewayResponse",
+    },
+    "ApiRestApiDeploymentDC05A82D19cc32df4734d8c2a482d458a59dc6bf": {
+      "DependsOn": [
+        "ApiRestApiproxyANY7D1D2F15",
+        "ApiRestApiproxyOPTIONS14872AA4",
+        "ApiRestApiproxy95CB4350",
+        "ApiRestApiANY1340C355",
+        "ApiRestApiOPTIONSB925735A",
+        "ApiRestApiDefault4xxF2DDE8E9",
+        "ApiRestApiDefault5xxF4F672B9",
+      ],
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "ApiRestApiDeploymentStagev157F58EAC": {
+      "DependsOn": [
+        "ApiRestApiAccount598A1DA6",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "ApiRestApiDeploymentDC05A82D19cc32df4734d8c2a482d458a59dc6bf",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+        "StageName": "v1",
+        "TracingEnabled": true,
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiRestApiE35FEAFE": {
+      "Properties": {
+        "Name": "RestApi",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "ApiRestApiEndpointParameter75C7A864": {
+      "Properties": {
+        "Name": "/stg/icasu-cdk-serverless-api-sample/e2e/REST_API_ENDPOINT",
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "https://",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              ".execute-api.ap-northeast-1.",
+              {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringERRORAlarm937B0D12": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "RestApiFuncApplicationLogERROR",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "ERROR",
+        "Namespace": "Lambda/RestApiFunc",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringERRORMetricFilter293F702D": {
+      "Properties": {
+        "FilterPattern": "ERROR",
+        "LogGroupName": {
+          "Ref": "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359",
+        },
+        "MetricTransformations": [
+          {
+            "MetricName": "ERROR",
+            "MetricNamespace": "Lambda/RestApiFunc",
+            "MetricValue": "1",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiRestApiFuncF1701C1C",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringWARNAlarmA0A85D6F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "RestApiFuncApplicationLogWARN",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "WARN",
+        "Namespace": "Lambda/RestApiFunc",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiRestApiFuncApplicationLogMonitoringWARNMetricFilterC4D1BEE4": {
+      "Properties": {
+        "FilterPattern": "WARN",
+        "LogGroupName": {
+          "Ref": "ApiRestApiFuncApplicationLogMonitoringLogGroupC2FE3359",
+        },
+        "MetricTransformations": [
+          {
+            "MetricName": "WARN",
+            "MetricNamespace": "Lambda/RestApiFunc",
+            "MetricValue": "1",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::MetricFilter",
+    },
+    "ApiRestApiFuncF1701C1C": {
+      "DependsOn": [
+        "ApiRestApiFuncServiceRoleDefaultPolicyA475465A",
+        "ApiRestApiFuncServiceRole5CBC5B3F",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-stg-dummy-aws-account-id-ap-northeast-1",
+          "S3Key": "HASH-REPLACED.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "COMPANIES_TABLE_INDUSTRY_CREATED_AT_INDEX_NAME": "IndustryCreatedAtIndex",
+            "COMPANIES_TABLE_NAME": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+            "POWERTOOLS_SERVICE_NAME": "stg-icasu-cdk-serverless-api-sample",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncServiceRole5CBC5B3F",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "TracingConfig": {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiRestApiFuncServiceRole5CBC5B3F": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiRestApiFuncServiceRoleDefaultPolicyA475465A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "DynamodbCompaniesTable31F93658",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "DynamodbCompaniesTable31F93658",
+                          "Arn",
+                        ],
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiRestApiFuncServiceRoleDefaultPolicyA475465A",
+        "Roles": [
+          {
+            "Ref": "ApiRestApiFuncServiceRole5CBC5B3F",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiRestApiOPTIONSB925735A": {
+      "Properties": {
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'300'",
+              },
+              "StatusCode": "204",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": "{ statusCode: 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Max-Age": true,
+            },
+            "StatusCode": "204",
+          },
+        ],
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiproxy95CB4350": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiRestApiE35FEAFE",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "ApiRestApiproxyANY7D1D2F15": {
+      "Properties": {
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "ApiCognitoUserPoolsAuthorizer04FC63E8",
+        },
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ApiRestApiFuncF1701C1C",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "ApiRestApiproxy95CB4350",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiRestApiproxyANYApiPermissionTeststgicasucdkserverlessapisampleMainStackApiRestApiB79C9F1CANYproxy5E36F689": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:stg-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/test-invoke-stage/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiproxyANYApiPermissionstgicasucdkserverlessapisampleMainStackApiRestApiB79C9F1CANYproxyA5B88F81": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ApiRestApiFuncF1701C1C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:stg-dummy-aws-account-id:",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+              "/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ApiRestApiproxyOPTIONS14872AA4": {
+      "Properties": {
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'300'",
+              },
+              "StatusCode": "204",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": "{ statusCode: 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Max-Age": true,
+            },
+            "StatusCode": "204",
+          },
+        ],
+        "ResourceId": {
+          "Ref": "ApiRestApiproxy95CB4350",
+        },
+        "RestApiId": {
+          "Ref": "ApiRestApiE35FEAFE",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ApiWebAclRestApiAssociationD0E2B756": {
+      "Properties": {
+        "ResourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":apigateway:ap-northeast-1::/restapis/",
+              {
+                "Ref": "ApiRestApiE35FEAFE",
+              },
+              "/stages/",
+              {
+                "Ref": "ApiRestApiDeploymentStagev157F58EAC",
+              },
+            ],
+          ],
+        },
+        "WebACLArn": {
+          "Fn::GetAtt": [
+            "WafForApiWebAcl18C8DBD1",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::WebACLAssociation",
+    },
+    "CognitoClientIdParameterF7D496F1": {
+      "Properties": {
+        "Name": "/stg/icasu-cdk-serverless-api-sample/e2e/COGNITO_CLIENT_ID",
+        "Type": "String",
+        "Value": {
+          "Ref": "CognitoUserPoolUserPoolClientForE2ETest9104A734",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "CognitoUserPool279BBD48": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1,
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2,
+            },
+          ],
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+        },
+        "AutoVerifiedAttributes": [
+          "email",
+        ],
+        "DeletionProtection": "ACTIVE",
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "EnabledMfas": [
+          "SMS_MFA",
+        ],
+        "MfaConfiguration": "OPTIONAL",
+        "SmsConfiguration": {
+          "ExternalId": "stgicasucdkserverlessapisampleMainStackCognitoUserPoolC25A3E8C",
+          "SnsCallerArn": {
+            "Fn::GetAtt": [
+              "CognitoUserPoolsmsRole738960F0",
+              "Arn",
+            ],
+          },
+        },
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UsernameAttributes": [
+          "email",
+        ],
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}",
+        },
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CognitoUserPoolIdParameterDC16FB6A": {
+      "Properties": {
+        "Name": "/stg/icasu-cdk-serverless-api-sample/e2e/COGNITO_USER_POOL_ID",
+        "Type": "String",
+        "Value": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "CognitoUserPoolUserPoolClient1E6BF456": {
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "profile",
+          "openid",
+        ],
+        "CallbackURLs": [
+          "https://stg.example.com/",
+        ],
+        "GenerateSecret": false,
+        "LogoutURLs": [
+          "https://stg.example.com/",
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "CognitoUserPoolUserPoolClientForE2ETest9104A734": {
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "profile",
+          "openid",
+        ],
+        "CallbackURLs": [
+          "https://stg.example.com/",
+        ],
+        "ExplicitAuthFlows": [
+          "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+        ],
+        "GenerateSecret": false,
+        "LogoutURLs": [
+          "https://stg.example.com/",
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "CognitoUserPoolUserPoolDomainC12FFA2B": {
+      "Properties": {
+        "Domain": "stg-icasu-cdk-serverless-api-sample",
+        "UserPoolId": {
+          "Ref": "CognitoUserPool279BBD48",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolDomain",
+    },
+    "CognitoUserPoolsmsRole738960F0": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "stgicasucdkserverlessapisampleMainStackCognitoUserPoolC25A3E8C",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cognito-idp.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "sns:Publish",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "sns-publish",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CognitoWebAclUserPoolAssociation324DD356": {
+      "Properties": {
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "CognitoUserPool279BBD48",
+            "Arn",
+          ],
+        },
+        "WebACLArn": {
+          "Fn::GetAtt": [
+            "WafForUserPoolWebAcl0EF70449",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::WebACLAssociation",
+    },
+    "DynamodbCompaniesTable31F93658": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "industry",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "N",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "DeletionProtectionEnabled": true,
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "IndustryCreatedAtIndex",
+            "KeySchema": [
+              {
+                "AttributeName": "industry",
+                "KeyType": "HASH",
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE",
+              },
+            ],
+            "Projection": {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "DynamodbCompaniesTableNameParameter5ABDA0D3": {
+      "Properties": {
+        "Name": "/stg/icasu-cdk-serverless-api-sample/e2e/COMPANIES_TABLE_NAME",
+        "Type": "String",
+        "Value": {
+          "Ref": "DynamodbCompaniesTable31F93658",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableConsumedReadCapacityUnitsAlarmDD661C43": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableConsumedReadCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableConsumedWriteCapacityUnitsAlarmF81D194F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableConsumedWriteCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableIndustryCreatedAtIndexConsumedReadCapacityUnitsAlarmD247F78B": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableIndustryCreatedAtIndexConsumedReadCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "GlobalSecondaryIndexName",
+            "Value": "IndustryCreatedAtIndex",
+          },
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableIndustryCreatedAtIndexConsumedWriteCapacityUnitsAlarm938AB83F": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableIndustryCreatedAtIndexConsumedWriteCapacityUnits",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "GlobalSecondaryIndexName",
+            "Value": "IndustryCreatedAtIndex",
+          },
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 10000,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DynamodbMetricsMonitoringCompaniesTableSystemErrorsAlarm17DCB297": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "AlarmName": "DynamodbCompaniesTableSystemErrors",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "DynamodbCompaniesTable31F93658",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "SystemErrors",
+        "Namespace": "AWS/DynamoDB",
+        "OKActions": [
+          {
+            "Ref": "AlertNotificationAlertNotificationTopicArnParameterParameter73C43355",
+          },
+        ],
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 3,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "GitHubActionsOidcCdkDeployPolicy1176F8AD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:getBucketLocation",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::*",
+            },
+            {
+              "Action": [
+                "cloudformation:CreateStack",
+                "cloudformation:CreateChangeSet",
+                "cloudformation:DeleteChangeSet",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:DescribeStacks",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:ExecuteChangeSet",
+                "cloudformation:GetTemplate",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:cloudformation:ap-northeast-1:stg-dummy-aws-account-id:stack/*/*",
+            },
+            {
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::cdk-hnb659fds-assets-stg-dummy-aws-account-id-ap-northeast-1/*",
+            },
+            {
+              "Action": "ssm:GetParameter",
+              "Effect": "Allow",
+              "Resource": "arn:aws:ssm:ap-northeast-1:stg-dummy-aws-account-id:parameter/cdk-bootstrap/hnb659fds/version",
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::stg-dummy-aws-account-id:role/cdk-hnb659fds-cfn-exec-role-stg-dummy-aws-account-id-ap-northeast-1",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkDeployPolicy",
+        "Roles": [
+          {
+            "Ref": "GitHubActionsOidcGitHubActionsOidcRole060A8DC2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GitHubActionsOidcGitHubActionsOidcRole060A8DC2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+                },
+                "StringLike": {
+                  "token.actions.githubusercontent.com:sub": "repo:classmethod-internal/icasu-cdk-serverless-api-sample:*",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "arn:aws:iam::stg-dummy-aws-account-id:oidc-provider/token.actions.githubusercontent.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "WafForApiLogConfigA6FEBD50": {
+      "DependsOn": [
+        "WafForApiWebAcl18C8DBD1",
+      ],
+      "Properties": {
+        "LogDestinationConfigs": [
+          {
+            "Fn::GetAtt": [
+              "WafForApiLogGroup99D88402",
+              "Arn",
+            ],
+          },
+        ],
+        "LoggingFilter": {
+          "DefaultBehavior": "DROP",
+          "Filters": [
+            {
+              "Behavior": "KEEP",
+              "Conditions": [
+                {
+                  "ActionCondition": {
+                    "Action": "BLOCK",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "COUNT",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "EXCLUDED_AS_COUNT",
+                  },
+                },
+              ],
+              "Requirement": "MEETS_ANY",
+            },
+          ],
+        },
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "WafForApiWebAcl18C8DBD1",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::LoggingConfiguration",
+    },
+    "WafForApiLogGroup99D88402": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "aws-waf-logs-",
+              {
+                "Fn::GetAtt": [
+                  "WafForApiWebAcl18C8DBD1",
+                  "Id",
+                ],
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "WafForApiWebAcl18C8DBD1": {
+      "Properties": {
+        "DefaultAction": {
+          "Allow": {},
+        },
+        "Rules": [
+          {
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 1,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesCommonRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesCommonRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 2,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesKnownBadInputsRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesAmazonIpReputationList",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 3,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesAmazonIpReputationList",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesAmazonIpReputationList",
+              "SampledRequestsEnabled": true,
+            },
+          },
+        ],
+        "Scope": "REGIONAL",
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "WebAcl",
+          "SampledRequestsEnabled": true,
+        },
+      },
+      "Type": "AWS::WAFv2::WebACL",
+    },
+    "WafForUserPoolLogConfigD51477D4": {
+      "DependsOn": [
+        "WafForUserPoolWebAcl0EF70449",
+      ],
+      "Properties": {
+        "LogDestinationConfigs": [
+          {
+            "Fn::GetAtt": [
+              "WafForUserPoolLogGroup11AD1A0E",
+              "Arn",
+            ],
+          },
+        ],
+        "LoggingFilter": {
+          "DefaultBehavior": "DROP",
+          "Filters": [
+            {
+              "Behavior": "KEEP",
+              "Conditions": [
+                {
+                  "ActionCondition": {
+                    "Action": "BLOCK",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "COUNT",
+                  },
+                },
+                {
+                  "ActionCondition": {
+                    "Action": "EXCLUDED_AS_COUNT",
+                  },
+                },
+              ],
+              "Requirement": "MEETS_ANY",
+            },
+          ],
+        },
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "WafForUserPoolWebAcl0EF70449",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::LoggingConfiguration",
+    },
+    "WafForUserPoolLogGroup11AD1A0E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "aws-waf-logs-",
+              {
+                "Fn::GetAtt": [
+                  "WafForUserPoolWebAcl0EF70449",
+                  "Id",
+                ],
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "WafForUserPoolWebAcl0EF70449": {
+      "Properties": {
+        "DefaultAction": {
+          "Allow": {},
+        },
+        "Rules": [
+          {
+            "Name": "AWSManagedRulesCommonRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 1,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesCommonRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesCommonRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 2,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesKnownBadInputsRuleSet",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesKnownBadInputsRuleSet",
+              "SampledRequestsEnabled": true,
+            },
+          },
+          {
+            "Name": "AWSManagedRulesAmazonIpReputationList",
+            "OverrideAction": {
+              "Count": {},
+            },
+            "Priority": 3,
+            "Statement": {
+              "ManagedRuleGroupStatement": {
+                "Name": "AWSManagedRulesAmazonIpReputationList",
+                "VendorName": "AWS",
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "AWS-AWSManagedRulesAmazonIpReputationList",
+              "SampledRequestsEnabled": true,
+            },
+          },
+        ],
+        "Scope": "REGIONAL",
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "WebAcl",
+          "SampledRequestsEnabled": true,
+        },
+      },
+      "Type": "AWS::WAFv2::WebACL",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

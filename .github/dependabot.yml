@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      # MEMO: daily だとアクティブに開発をしていない期間に PR の作成頻度が過剰となるため、weekly を指定。
+      interval: weekly
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+    ## 最新版にバグが含まれるなどアップデートさせたくないパッケージは ignore で指定
+    # ignore:
+    # - dependency-name: "dependency-name"

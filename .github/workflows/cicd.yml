@@ -1,0 +1,102 @@
+name: CI/CD
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+
+env:
+  TARGET_ENV: ${{ github.base_ref == 'main' && 'prd' || github.base_ref == 'staging' && 'stg' || 'dev' }}
+  DEV_AWS_ACCOUNT_ID: ${{ vars.DEV_AWS_ACCOUNT_ID }}
+  STG_AWS_ACCOUNT_ID: ${{ vars.STG_AWS_ACCOUNT_ID }}
+  PRD_AWS_ACCOUNT_ID: ${{ vars.PRD_AWS_ACCOUNT_ID }}
+
+jobs:
+  Integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Cache Dependency
+        uses: actions/cache@v4
+        id: cache_dependency
+        env:
+          cache-name: cache-dependency
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Dependency
+        if: ${{ steps.cache_dependency.outputs.cache-hit != 'true' }}
+        run: npm ci --no-audit --progress=false --silent
+
+      - name: Check Format
+        run: |
+          npm run check:format
+
+      - name: Check Lint
+        run: |
+          npm run check:lint
+
+      - name: Check Type
+        run: npm run check:type
+
+      - name: Check Cspell
+        run: npm run check:cspell
+
+      - name: Cdk Snapshot Test
+        run: npm run test-snapshot -- run
+
+      - name: Unit Test
+        run: npm run test-unit -- run
+
+  # TODO: CD を Environments を使った実装に置き換え予定
+  # @see https://github.com/classmethod-internal/icasu-cdk-serverless-api-sample/issues/342
+
+  Deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.pull_request.merged == true
+    needs: Integration
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Restore Cache Dependency
+        uses: actions/cache/restore@v4
+        id: cache_dependency
+        env:
+          cache-name: cache-dependency
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Assume Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: "ap-northeast-1"
+          role-to-assume: ${{ env.TARGET_ENV == 'prd' && vars.PRD_AWS_OIDC_ROLE_ARN || env.TARGET_ENV == 'stg' && vars.STG_AWS_OIDC_ROLE_ARN || vars.DEV_AWS_OIDC_ROLE_ARN }}
+
+      - name: Deploy
+        run: |
+          npm run deploy:${{ env.TARGET_ENV }}

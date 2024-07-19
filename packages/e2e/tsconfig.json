@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["*"]
+    },
+    // vitest.shared.ts で path モジュールを import で読み込む際のワークアラウンド
+    // @see https://github.com/TypeStrong/ts-node/issues/1096
+    "esModuleInterop": true
+  }
+}

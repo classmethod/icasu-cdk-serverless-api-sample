@@ -1,0 +1,34 @@
+{
+  "name": "cdk-lambda-dynamodb-sample",
+  "version": "0.0.0-github-release",
+  "scripts": {
+    "check": "run-p check:*",
+    "check:format": "prettier --check --cache './packages/**/*.ts'",
+    "check:lint": "eslint --cache './packages/**/*.ts' --max-warnings=0 --resolve-plugins-relative-to .",
+    "check:type": "npm run check:type -ws",
+    "check:cspell": "npm run check:cspell -ws",
+    "test-unit": "npm run test -w packages/server",
+    "test-snapshot": "npm run test-snapshot -w packages/iac",
+    "test-snapshot:update": "npm run test-snapshot -w packages/iac -- run -u",
+    "deploy:dev": "npm run deploy -w packages/iac -- --context environment=dev",
+    "deploy:dev:direct": "npm run deploy -w packages/iac -- --context environment=dev --method=direct",
+    "deploy:stg": "npm run deploy -w packages/iac -- --context environment=stg",
+    "deploy:prd": "npm run deploy -w packages/iac -- --context environment=prd",
+    "test-e2e-api:dev": "npm run test-api:dev -w packages/e2e",
+    "test-e2e-api:stg": "npm run test-api:stg -w packages/e2e",
+    "install:recommended-vscode-extensions": "for ext in $(jq -r '.recommendations[]' .vscode/extensions.json); do code --install-extension $ext; echo \"\"; done"
+  },
+  "workspaces": [
+    "packages/iac",
+    "packages/server",
+    "packages/e2e"
+  ],
+  "devDependencies": {
+    "@classmethod/eslint-config": "0.1.7",
+    "@classmethod/prettier-config": "0.0.3",
+    "cspell": "8.10.4",
+    "npm-run-all": "4.1.5",
+    "prettier": "3.3.3"
+  },
+  "prettier": "@classmethod/prettier-config"
+}
