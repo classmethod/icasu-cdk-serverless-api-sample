@@ -12,14 +12,14 @@
   },
   "devDependencies": {
     "@types/node": "20.14.10",
-    "aws-cdk": "2.149.0",
+    "aws-cdk": "2.1020.2",
     "ts-node": "10.9.2",
-    "typescript": "5.5.3"
+    "typescript": "5.8.3"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.149.0",
-    "constructs": "10.3.0",
-    "esbuild": "0.23.0",
+    "aws-cdk-lib": "2.204.0",
+    "constructs": "10.4.2",
+    "esbuild": "0.25.6",
     "vitest": "1.6.0"
   }
 }
